@@ -2,10 +2,12 @@ import java.time.ZonedDateTime;
 
 import static java.lang.Math.*;
 
+import java.text.DecimalFormat;
+
 /**
  * Represents a point in space and time, recorded by a GPS sensor.
  *
- * @author Nick Efford & YOUR NAME
+ * @author Nick Efford & Kang Liu
  */
 public class Point {
   // Constants useful for bounds checking, etc
@@ -17,13 +19,52 @@ public class Point {
   private static final double MEAN_EARTH_RADIUS = 6.371009e+6;
 
   // TODO: Define fields for time, longitude, latitude and elevation
-
+  private double longitude, latitude, elevation;
+  private ZonedDateTime datetime;
+  
   // TODO: Define a constructor
-
+  Point(ZonedDateTime d, double lo, double la, double el)
+  {
+	  if(lo>MAX_LONGITUDE||lo<MIN_LONGITUDE||la>MAX_LATITUDE||la<MIN_LATITUDE)
+		  throw new GPSException("Invailable Input");
+	  else {
+		  longitude=lo;
+		  latitude=la;
+		  elevation=el;
+	  }
+	  datetime=d;
+  }
+  
   // TODO: Define getters for the fields
-
+  double getLongitude()
+  {
+	  return longitude;
+  }
+  double getLatitude()
+  {
+	  return latitude;
+  }
+  double getElevation()
+  {
+	  return elevation;
+  }
+  ZonedDateTime getTime()
+  {
+	  return datetime;
+  }
   // TODO: Define a toString() method that meets requirements
-
+  public String toString()
+  {
+	  DecimalFormat df = new DecimalFormat("0.00000");
+	  String s="(";
+	  s+="".valueOf(df.format(longitude));
+	  s+=", ";
+	  s+="".valueOf(df.format(latitude));
+	  s+="), ";
+	  s+="".valueOf(elevation);
+	  s+=" m";
+	  return s;
+  }
   // Do not alter anything beneath this comment
 
   /**
