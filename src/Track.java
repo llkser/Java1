@@ -1,12 +1,13 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Scanner;
 /**
- * Represents a point in space and time, recorded by a GPS sensor.
+ * Represents a track that can store some points and compute some kinds of statistical data.
  *
- * @author Nick Efford & Kang Liu
+ * @author Kang Liu
  */
 public class Track{
 	private ArrayList<Point> tr;
@@ -65,5 +66,58 @@ public class Track{
 			a=tr.get(index);
 		}
 		return a;
+	}
+	public Point lowestPoint() {
+		if(tr.isEmpty())
+			throw new GPSException("No Point in Track!");
+		else {
+			double m=tr.get(0).getElevation();
+			int index=0;
+			for(int i=1;i<tr.size();i++)
+			{
+				if(m>tr.get(i).getElevation())
+				{
+					m=tr.get(i).getElevation();
+					index=i;
+				}
+			}
+			return tr.get(index);
+		}
+	}
+	public Point highestPoint() {
+		if(tr.isEmpty())
+			throw new GPSException("No Point in Track!");
+		else {
+			double m=tr.get(0).getElevation();
+			int index=0;
+			for(int i=1;i<tr.size();i++)
+			{
+				if(m<tr.get(i).getElevation())
+				{
+					m=tr.get(i).getElevation();
+					index=i;
+				}
+			}
+			return tr.get(index);
+		}
+	}
+	public double totalDistance() {
+		if(tr.size()<=1)
+			throw new GPSException("Point not Enough in Track!");
+		else {
+			double total=0;
+			for(int i=0;i<tr.size()-1;i++)
+				total+=Point.greatCircleDistance(tr.get(i), tr.get(i+1));
+			return total;
+		}
+	}
+	public double averageSpeed() {
+		if(tr.size()<=1)
+			throw new GPSException("Point not Enough in Track!");
+		else {
+			double total=this.totalDistance();
+			double time=ChronoUnit.SECONDS.between(tr.get(0).getTime(), tr.get(tr.size()-1).getTime());
+			return total/time;
+		}
 	}
 }
