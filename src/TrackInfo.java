@@ -1,3 +1,5 @@
+//create a Track object and test its functions
+
 import java.io.FileNotFoundException;
 
 public class TrackInfo {
@@ -8,13 +10,14 @@ public class TrackInfo {
 	    } 
 		Track track1=new Track();
 		try {
-			track1.readFile(args[1]);
+			track1.readFile(args[0]);
 		}
 		catch (FileNotFoundException e) {
-			e.getMessage();
+			System.out.println("File not Found!");
 			System.exit(1);
 		}
 		catch (GPSException e) {
+			System.out.println("Data inavailalbe!");
 			System.exit(1);
 		}
 		System.out.printf("%d points in track\n",track1.size());

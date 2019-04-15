@@ -14,13 +14,13 @@ public class Track{
 	public Track() {
 		tr=new ArrayList<Point>();
 	}
-	public void readFile(String str) throws FileNotFoundException{
+	public void readFile(String str) throws FileNotFoundException,GPSException{
 			if(this.size()>0)
 				tr.clear();
 			Scanner sc= new Scanner(new File(str));
 			Scanner vScanner= null;
 			sc.nextLine();
-			int index;
+			int index=0;
 			String s;
 			double a,b,c;
 			ZonedDateTime data=null;
@@ -43,13 +43,21 @@ public class Track{
 					else if(index==3)
 					{
 						c=Double.parseDouble(s);
-						p=new Point(data, a, b, c);
+						try {
+							p=new Point(data, a, b, c);
+						}
+						catch (GPSException e) {
+							System.out.println("Invailable Input");
+							throw e;
+						}
 						tr.add(p);
 					}
 					index++;
 					if(index==4)
 						index=0;
 				}
+				if(index>0&&index<=3)
+					throw new GPSException("Invailable Input");
 			}
 	}
 	public void add(Point a) {
